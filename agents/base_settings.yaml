@@ -1,0 +1,126 @@
+# Common configuration for all code generation agents
+description: "Base configuration for code generation agents"
+
+# Common API settings
+api_settings:
+  retry_attempts: 3
+  min_backoff: 4
+  max_backoff: 10
+  timeout: 30
+
+# Common prompt templates
+prompts:
+  code_generation: |
+    Create Python code based on these requirements:
+    {requirements}
+    
+    Consider the following aspects:
+    {considerations}
+    
+    The code should:
+    - Follow PEP 8 guidelines
+    - Include comprehensive docstrings
+    - Implement proper error handling
+    - Be efficient and maintainable
+    
+    Please provide the response as JSON:
+    {
+      "code": "the complete Python code",
+      "explanation": "brief explanation of implementation",
+      "considerations": ["how each consideration was addressed"]
+    }
+
+  code_validation: |
+    Review this Python code for quality and correctness:
+    {code}
+    
+    Check for:
+    - Syntax errors
+    - Logic issues
+    - Style violations
+    - Security concerns
+    - Performance issues
+    
+    Provide a JSON response with:
+    {
+      "is_valid": boolean,
+      "issues": [list of issues],
+      "suggestions": [improvement suggestions]
+    }
+
+  code_improvement: |
+    Improve this Python code:
+    {code}
+    
+    Focus on these aspects:
+    {aspects}
+    
+    Provide a JSON response with:
+    {
+      "code": "the improved code",
+      "improvements": ["list of improvements made"],
+      "explanation": "rationale for changes"
+    }
+
+# Common response schemas
+response_schemas:
+  code_generation:
+    required_fields:
+      - code
+      - explanation
+    optional_fields:
+      - considerations
+      - complexity
+      - dependencies
+
+  code_validation:
+    required_fields:
+      - is_valid
+      - issues
+    optional_fields:
+      - suggestions
+      - severity_levels
+
+  code_improvement:
+    required_fields:
+      - code
+      - improvements
+    optional_fields:
+      - explanation
+      - performance_impact
+
+# Common error messages
+error_messages:
+  api_key_missing: "{provider} API key not found in environment variables"
+  model_not_found: "Specified model '{model}' not found in configuration"
+  invalid_response: "Invalid response format from {provider} API"
+  parse_error: "Failed to parse response: {details}"
+  generation_failed: "Code generation failed: {details}"
+  validation_failed: "Code validation failed: {details}"
+  improvement_failed: "Code improvement failed: {details}"
+
+# Common system prompts
+system_prompts:
+  base: |
+    You are an expert Python developer specializing in:
+    - Software architecture and system design
+    - Clean code and best practices
+    - Performance optimization
+    - Security considerations
+    Generate clean, efficient, and well-documented Python code.
+
+  validation: |
+    You are a Python code reviewer specializing in:
+    - Code quality assessment
+    - Best practices validation
+    - Security analysis
+    - Performance optimization
+    Provide detailed feedback on the code's quality and correctness.
+
+  improvement: |
+    You are a Python optimization expert focusing on:
+    - Code refactoring
+    - Performance enhancement
+    - Design pattern implementation
+    - Code maintainability
+    Improve the provided code while preserving its functionality.

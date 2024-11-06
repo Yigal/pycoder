@@ -1,0 +1,141 @@
+# OpenAI-specific configuration
+provider_name: "openai"
+description: "OpenAI code generation agent configuration"
+
+# Model configurations
+models:
+  gpt-4:
+    context_length: 8192
+    best_for: 
+      - "complex_systems"
+      - "algorithms"
+      - "architecture"
+    system_prompt: |
+      You are an expert Python developer with deep knowledge of software architecture,
+      design patterns, and best practices. Generate clean, efficient, and well-documented
+      Python code based on the requirements provided.
+
+  gpt-3.5-turbo:
+    context_length: 4096
+    best_for:
+      - "simple_scripts"
+      - "code_fixes"
+      - "refactoring"
+    system_prompt: |
+      You are a Python developer focused on creating clean and efficient code.
+      Generate practical solutions following Python best practices.
+
+# Default settings
+default_model: "gpt-3.5-turbo"
+default_temperature: 0.7
+default_max_tokens: 2000
+
+# API settings
+api_settings:
+  response_format: "json_object"
+  retry_attempts: 3
+  min_backoff: 4
+  max_backoff: 10
+  timeout: 30
+
+# Prompt templates
+prompts:
+  code_generation: |
+    Generate Python code that meets these requirements:
+    {requirements}
+    
+    Consider the following aspects:
+    {considerations}
+    
+    The code should:
+    - Follow PEP 8 guidelines
+    - Include proper error handling
+    - Have comprehensive docstrings
+    - Be well-structured and maintainable
+    
+    Respond with a JSON object containing:
+    - 'code': The complete Python code
+    - 'explanation': Brief explanation of the implementation
+    - 'considerations': How the requirements were addressed
+
+  code_validation: |
+    Review the following Python code for issues:
+    {code}
+    
+    Analyze for:
+    - Syntax errors
+    - Logic issues
+    - Best practices violations
+    - Security concerns
+    
+    Respond with a JSON object containing:
+    - 'is_valid': boolean indicating if code is valid
+    - 'issues': list of identified issues
+    - 'suggestions': list of improvement suggestions
+
+  code_improvement: |
+    Improve the following Python code:
+    {code}
+    
+    Focus on these aspects:
+    {aspects}
+    
+    Respond with a JSON object containing:
+    - 'code': The improved code
+    - 'improvements': List of improvements made
+    - 'explanation': Rationale for changes
+
+# Response formats
+response_schemas:
+  code_generation:
+    required_fields:
+      - code
+      - explanation
+    optional_fields:
+      - considerations
+      - complexity
+      - dependencies
+
+  code_validation:
+    required_fields:
+      - is_valid
+      - issues
+    optional_fields:
+      - suggestions
+      - severity_levels
+
+  code_improvement:
+    required_fields:
+      - code
+      - improvements
+    optional_fields:
+      - explanation
+      - performance_impact
+
+# Error messages
+error_messages:
+  api_key_missing: "OpenAI API key not found in environment variables"
+  model_not_found: "Specified model '{model}' not found in configuration"
+  invalid_response: "Invalid response format from OpenAI API"
+  parse_error: "Failed to parse OpenAI response: {details}"
+  generation_failed: "Code generation failed: {details}"
+  validation_failed: "Code validation failed: {details}"
+  improvement_failed: "Code improvement failed: {details}"
+
+# System prompts for different tasks
+system_prompts:
+  validation: |
+    You are a Python code reviewer with expertise in:
+    - Code quality assessment
+    - Best practices enforcement
+    - Security vulnerability detection
+    - Performance optimization
+    Analyze the provided code and provide detailed feedback.
+
+  improvement: |
+    You are a Python optimization expert specializing in:
+    - Code refactoring
+    - Performance optimization
+    - Code maintainability
+    - Design pattern implementation
+    Improve the provided code while maintaining its functionality.

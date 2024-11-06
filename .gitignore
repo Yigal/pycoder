@@ -5,7 +5,7 @@ __pycache__/
 .notebook
 # C extensions
 *.so
-
+.env
 # Distribution / packaging
 .Python
 build/
